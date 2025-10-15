@@ -57,14 +57,19 @@ Ce projet utilise Supabase comme base de données. Vous devez créer votre propr
 1.  Créez un nouveau projet sur [supabase.com](https://supabase.com).
 2.  Dans votre projet, allez dans `Settings > API` pour récupérer votre URL et votre clé `anon`.
 3.  Créez le fichier `.env.local` et ajoutez les lignes suivantes en remplaçant les valeurs :
-    ```env
+   
+    ```bash
     NEXT_PUBLIC_SUPABASE_URL=votre_url_de_projet
     NEXT_PUBLIC_SUPABASE_ANON_KEY=votre_cle_anon
     ```
 4.  Dans le `Table Editor` de Supabase, créez une table nommée `voyages_selectionnes` avec les colonnes `id` (int8, primary key), `site_id` (int8) et `created_at` (timestamptz, default: now()).
-5.  Allez dans `Authentication > Policies`, créez une nouvelle politique pour la table `voyages_selectionnes` qui autorise l'opération `INSERT` pour le rôle `anon` avec la condition `true`. na afaka atao hoe all amizay manana autorisation daholo ny opérations rehetra ataotsika ao anatiny ...
+5.  Allez dans `Authentication > Policies`, créez une nouvelle politique pour la table `voyages_selectionnes` qui autorise l'opération `INSERT` pour le rôle `anon` avec la condition `true`.
+  
+    na afaka atao hoe all amizay manana autorisation daholo ny opérations rehetra ataotsika ao anatiny ...
 
 ## Structure du Projet (pour l'instant)
+
+ ```bash
 src/
 ├── app/ # Pages et layouts Next.js
 ├── components/ # Composants React
@@ -73,6 +78,7 @@ src/
 ├── lib/ # Utilitaires (client Supabase, etc.)
 ├── types/ # Définitions de types TypeScript
 └── data/ # Données statiques
+```
 
 ## Comment Contribuer
 
