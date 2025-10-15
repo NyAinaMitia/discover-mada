@@ -1,14 +1,7 @@
 // donnees.ts
+import { Site } from "@/types";
 
-export interface SiteTouristique {
-  id: number;
-  nom: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-}
-
-export const sitesTouristiques: SiteTouristique[] = [
+export const sitesTouristiques: Site[] = [
   {
     id: 1,
     nom: "Avenue des Baobabs",

@@ -12,7 +12,7 @@ interface UserPosition {
 
 // Chargement dynamique de la carte (sans SSR)
 const CarteMadagascar = dynamic<{ userPosition: UserPosition | null }>(
-  () => import("@/components/CarteMadagascar"),
+  () => import("@/components/map/CarteMadagascar"),
   {
     ssr: false,
     loading: () => <p>Chargement de la carte...</p>,

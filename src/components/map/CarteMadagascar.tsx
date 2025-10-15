@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { sitesTouristiques, SiteTouristique } from "@/donnees";
+import { sitesTouristiques } from "@/data/sites";
 import { supabase } from "@/lib/supabase";
 import React from "react";
+import { Site } from "@/types";
 
 // --- Correction importante pour les icônes Leaflet ---
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -52,7 +53,7 @@ export default function CarteMadagascar() {
   }, []);
 
   // Insertion en base de données
-  const handleAddToTrip = async (site: SiteTouristique): Promise<void> => {
+  const handleAddToTrip = async (site: Site): Promise<void> => {
     try {
       const { data, error } = await supabase
         .from("voyages_selectionnes")
