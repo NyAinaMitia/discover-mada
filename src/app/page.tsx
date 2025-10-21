@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import React from "react";
 
@@ -20,27 +20,37 @@ const CarteMadagascar = dynamic<{ userPosition: UserPosition | null }>(
 );
 
 export default function HomePage() {
-  // État pour la position de l'utilisateur
-  const [userPosition, setUserPosition] = useState<UserPosition | null>(null);
+  // État pour stocker la position de l'utilisateur
+  const [userLocation, setUserLocation] = useState<UserPosition | null>(null);
+  // NOUVEAU : États pour les dates du voyage
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
-  // Fonction pour récupérer la position de l'utilisateur
-  const handleFindMe = (): void => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserPosition({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-        },
-        (error) => {
-          alert("Impossible d'obtenir votre position : " + error.message);
-        }
+  // Effet pour demander la position de l'utilisateur au chargement de la page
+  useEffect(() => {
+    // On vérifie si le navigateur supporte la géolocalisation
+    if (!navigator.geolocation) {
+      console.error(
+        "La géolocalisation n'est pas supportée par votre navigateur."
       );
-    } else {
-      alert("La géolocalisation n'est pas supportée par votre navigateur.");
+      return;
     }
-  };
+
+    // On demande la position actuelle
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // En cas de succès, on met à jour l'état avec les coordonnées
+        setUserLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      },
+      (error) => {
+        // En cas d'erreur, on l'affiche dans la console
+        console.error("Erreur de géolocalisation:", error.message);
+      }
+    );
+  }, []); // Le tableau vide [] assure que cet effet ne s'exécute qu'une seule fois
 
   return (
     <main className="bg-gray-100 min-h-screen flex flex-col items-center p-8">
@@ -49,19 +59,44 @@ export default function HomePage() {
           Découvrez les Merveilles de Madagascar
         </h1>
         <p className="mt-2 text-gray-700">Votre guide de voyage interactif.</p>
+
+        {/* NOUVEAU : Sélecteurs de dates */}
+        <div className="mt-6 flex justify-center items-center gap-4">
+          <div>
+            <label
+              htmlFor="start-date"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date de départ
+            </label>
+            <input
+              type="date"
+              id="start-date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="mt-1 block w-full rounded-md text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="end-date"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Date de retour
+            </label>
+            <input
+              type="date"
+              id="end-date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="mt-1 block w-full rounded-md text-gray-700 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+            />
+          </div>
+        </div>
       </header>
 
-      {/* Bouton pour activer la géolocalisation */}
-      <button
-        onClick={handleFindMe}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4"
-      >
-        📍 Me localiser
-      </button>
-
       <section className="w-full max-w-4xl">
-        {/* On passe la position de l'utilisateur à la carte */}
-        <CarteMadagascar userPosition={userPosition} />
+        <CarteMadagascar userPosition={userLocation} />
       </section>
     </main>
   );
