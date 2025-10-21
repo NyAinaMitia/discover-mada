@@ -1,20 +1,44 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+// File: src/lib/supabase.ts
 
-// On récupère les variables d'environnement
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string | undefined;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as
-  | string
-  | undefined;
+import { createClient } from '@supabase/supabase-js'
 
-// Vérification de sécurité : si une variable est manquante, on lève une erreur
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "Les variables d'environnement Supabase ne sont pas définies."
-  );
+// Get environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+// Validate environment variables
+if (!supabaseUrl) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
 }
 
-// On crée le client Supabase avec un typage explicite
-export const supabase: SupabaseClient = createClient(
-  supabaseUrl,
-  supabaseAnonKey
-);
+if (!supabaseAnonKey) {
+  throw new Error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable')
+}
+
+// Create and export Supabase client
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: false, // Important for server-side routes
+  },
+})
+
+// Helper function to test connection
+export async function testSupabaseConnection() {
+  try {
+    const { data, error } = await supabase
+      .from('voyage')
+      .select('count')
+      .limit(1)
+    
+    if (error) {
+      console.error('Supabase connection error:', error)
+      return false
+    }
+    
+    console.log('Supabase connected successfully')
+    return true
+  } catch (err) {
+    console.error('Supabase connection failed:', err)
+    return false
+  }
+}
