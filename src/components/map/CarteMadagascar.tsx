@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+// @ts-ignore
 import "leaflet/dist/leaflet.css";
-import { sitesTouristiques } from "@/data/sites";
-import { supabase } from "@/lib/supabase";
+import { sitesTouristiques } from "../../data/sites";
+import { supabase } from "../../lib/supabase";
 import React from "react";
-import { Site } from "@/types";
+import { Site } from "../../types";
 
 // --- Correction importante pour les icônes Leaflet ---
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -39,6 +40,8 @@ export default function CarteMadagascar() {
     const { data, error } = await supabase
       .from("voyages_selectionnes")
       .select("site_id");
+
+      console.log("Résultat Supabase :", { data, error });
 
     if (error) {
       console.error("Erreur lors de la récupération:", error);
