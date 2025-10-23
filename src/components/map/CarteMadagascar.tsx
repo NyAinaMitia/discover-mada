@@ -10,6 +10,19 @@ import { supabase } from "../../lib/supabase";
 import React from "react";
 import { Site } from "../../types";
 
+interface UserPosition {
+  lat: number;
+  lng: number;
+}
+
+interface Restaurant {
+  id: number;
+  nom_restaurant: string;
+  latitude: number;
+  longitude: number;
+  ville: string;
+}
+
 // --- Correction importante pour les icônes Leaflet ---
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -75,7 +88,7 @@ export default function CarteMadagascar() {
     }
   };
 
-  return (
+  return (  
     <MapContainer
       center={[-20.0, 47.0]}
       zoom={6}

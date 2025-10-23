@@ -3,6 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 // Typage de la position utilisateur
 interface UserPosition {
@@ -12,7 +13,7 @@ interface UserPosition {
 
 // Chargement dynamique de la carte (sans SSR)
 const CarteMadagascar = dynamic<{ userPosition: UserPosition | null }>(
-  () => import("../components/map/CarteMadagascar"),
+  () => import("../components/map/Madagascar"),
   {
     ssr: false,
     loading: () => <p>Chargement de la carte...</p>,
@@ -22,6 +23,7 @@ const CarteMadagascar = dynamic<{ userPosition: UserPosition | null }>(
 export default function HomePage() {
   // État pour la position de l'utilisateur
   const [userPosition, setUserPosition] = useState<UserPosition | null>(null);
+  const router = useRouter();
 
   // Fonction pour récupérer la position de l'utilisateur
   const handleFindMe = (): void => {
@@ -57,6 +59,13 @@ export default function HomePage() {
         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4"
       >
         📍 Me localiser
+      </button>
+
+      <button
+        onClick={() => router.push("/restaurant")}
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
+      >
+        🍽️ Voir les Restaurants
       </button>
 
       <section className="w-full max-w-4xl">
